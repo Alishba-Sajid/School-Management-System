@@ -1,0 +1,36 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <img src="assets/school-logo.png" alt="School Logo" height="40" style="margin-right: 10px;" />
+      School Management System
+    </a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <!-- Add the new Home link here -->
+        <li class="nav-item">
+          <a routerLink="/" routerLinkActive="active" class="nav-link">Home</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/students" routerLinkActive="active" class="nav-link">Students</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/teachers" routerLinkActive="active" class="nav-link">Teachers</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/subjects" routerLinkActive="active" class="nav-link">Subjects</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/class-lectures" routerLinkActive="active" class="nav-link">Class Lectures</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/enrollments" routerLinkActive="active" class="nav-link">Enrollments</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+<div class="container mt-4" style="min-height: 100vh;">
+  <router-outlet></router-outlet>
+</div>

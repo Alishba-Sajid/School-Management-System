@@ -1,0 +1,77 @@
+<div class="container">
+  <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+
+  <h2>{{ isEditMode ? 'Edit Teacher' : 'Add New Teacher' }}</h2>
+
+  <form [formGroup]="teacherForm" (ngSubmit)="onSubmit()">
+    <!-- Full Name -->
+    <div class="form-group mb-2">
+      <label>Full Name</label>
+      <input formControlName="fullName" class="form-control" placeholder="Enter name" />
+      <div class="text-danger" *ngIf="teacherForm.get('fullName')?.errors">
+        {{ teacherForm.get('fullName')?.errors?.['required'] ? 'Name is required.' : '' }}
+        {{ teacherForm.get('fullName')?.errors?.['backend'] }}
+      </div>
+    </div>
+
+    <!-- Email -->
+    <div class="form-group mb-2">
+      <label>Email</label>
+      <input formControlName="email" class="form-control" placeholder="Enter email" />
+      <div class="text-danger" *ngIf="teacherForm.get('email')?.errors">
+        {{ teacherForm.get('email')?.errors?.['required'] ? 'Email is required.' : '' }}
+        {{ teacherForm.get('email')?.errors?.['email'] ? 'Enter a valid email.' : '' }}
+        {{ teacherForm.get('email')?.errors?.['backend'] }}
+      </div>
+    </div>
+
+    <!-- Department -->
+    <div class="form-group mb-2">
+      <label>Department</label>
+      <input formControlName="department" class="form-control" placeholder="Enter department" />
+      <div class="text-danger" *ngIf="teacherForm.get('department')?.errors">
+        {{ teacherForm.get('department')?.errors?.['required'] ? 'Department is required.' : '' }}
+        {{ teacherForm.get('department')?.errors?.['backend'] }}
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <button type="submit" class="btn btn-success mt-2" [disabled]="teacherForm.invalid || isLoading">
+      {{ isEditMode ? 'Update Teacher' : 'Add Teacher' }}
+    </button>
+    <button *ngIf="isEditMode" type="button" class="btn btn-secondary mt-2 ms-2" (click)="cancelEdit()">
+      Cancel
+    </button>
+  </form>
+
+  <hr />
+
+  <h3>👩‍🏫 Teachers List</h3>
+  <table class="table table-bordered" *ngIf="!isLoading && teachers.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Full Name</th>
+        <th>Email</th>
+        <th>Department</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let t of teachers">
+        <td>{{ t.id }}</td>
+        <td>{{ t.fullName }}</td>
+        <td>{{ t.email }}</td>
+        <td>{{ t.department }}</td>
+        <td>
+          <button class="btn btn-primary btn-sm me-1" (click)="editTeacher(t)">Edit</button>
+          <button class="btn btn-danger btn-sm" (click)="deleteTeacher(t.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!isLoading && teachers.length === 0" class="alert alert-info">
+    No teachers found.
+  </div>
+</div>

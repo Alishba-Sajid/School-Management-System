@@ -1,0 +1,96 @@
+<div class="container">
+
+  <!-- SPINNER -->
+  <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+
+  <!-- FORM + TABLE only shown when not loading -->
+  <div *ngIf="!isLoading">
+
+    <h2>{{ isEditMode ? 'Edit Student' : 'Add New Student' }}</h2>
+
+    <form [formGroup]="studentForm" (ngSubmit)="onSubmit()">
+
+      <!-- FULL NAME -->
+      <div class="form-group mb-2">
+        <label>Full Name</label>
+        <input formControlName="fullName" class="form-control" placeholder="Enter name" />
+        <div class="text-danger" *ngIf="studentForm.get('fullName')?.touched && studentForm.get('fullName')?.errors">
+          <div *ngIf="studentForm.get('fullName')?.errors?.['required']">Full name is required.</div>
+          <div *ngIf="studentForm.get('fullName')?.errors?.['backend']">
+            {{ studentForm.get('fullName')?.errors?.['backend'] }}
+          </div>
+        </div>
+      </div>
+
+      <!-- AGE -->
+      <div class="form-group mb-2">
+        <label>Age</label>
+        <input type="number" formControlName="age" class="form-control" placeholder="Enter age" />
+        <div class="text-danger" *ngIf="studentForm.get('age')?.touched && studentForm.get('age')?.errors">
+          <div *ngIf="studentForm.get('age')?.errors?.['required']">Age is required.</div>
+          <div *ngIf="studentForm.get('age')?.errors?.['min']">Age must be at least 3.</div>
+          <div *ngIf="studentForm.get('age')?.errors?.['max']">Age cannot be more than 18.</div>
+          <div *ngIf="studentForm.get('age')?.errors?.['backend']">
+            {{ studentForm.get('age')?.errors?.['backend'] }}
+          </div>
+        </div>
+      </div>
+
+      <!-- GENDER -->
+      <div class="form-group mb-2">
+        <label>Gender</label>
+        <select formControlName="gender" class="form-control">
+          <option value="">Select Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+        <div class="text-danger" *ngIf="studentForm.get('gender')?.touched && studentForm.get('gender')?.errors">
+          <div *ngIf="studentForm.get('gender')?.errors?.['required']">Gender is required.</div>
+          <div *ngIf="studentForm.get('gender')?.errors?.['backend']">
+            {{ studentForm.get('gender')?.errors?.['backend'] }}
+          </div>
+        </div>
+      </div>
+
+      <!-- BUTTONS -->
+      <button type="submit" class="btn btn-success mt-2"
+              [disabled]="studentForm.invalid && studentForm.touched">
+        {{ isEditMode ? 'Update Student' : 'Add Student' }}
+      </button>
+      <button type="button" *ngIf="isEditMode" class="btn btn-secondary mt-2 ms-2" (click)="cancelEdit()">
+        Cancel
+      </button>
+    </form>
+
+    <hr />
+
+    <!-- STUDENT LIST -->
+    <h3>👨‍🎓 Student List</h3>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Full Name</th>
+          <th>Age</th>
+          <th>Gender</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let s of students">
+          <td>{{ s.id }}</td>
+          <td>{{ s.fullName }}</td>
+          <td>{{ s.age }}</td>
+          <td>{{ s.gender }}</td>
+          <td>
+            <button class="btn btn-primary btn-sm me-1" (click)="editStudent(s)">Edit</button>
+            <button class="btn btn-danger btn-sm" (click)="deleteStudent(s.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div> <!-- /!isLoading -->
+
+</div>

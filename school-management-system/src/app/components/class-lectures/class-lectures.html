@@ -1,0 +1,106 @@
+<div class="container">
+
+  <!-- Spinner -->
+  <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+
+  <!-- Main Content -->
+  <div *ngIf="!isLoading">
+
+    <h2>{{ isEditMode ? 'Edit Class Lecture' : 'Create Class Lecture' }}</h2>
+
+    <form [formGroup]="lectureForm" (ngSubmit)="onSubmit()">
+
+      <!-- TITLE -->
+      <div class="form-group mb-2">
+        <label>Title:</label>
+        <input class="form-control" formControlName="title" placeholder="Lecture Title" />
+        <div class="text-danger" *ngIf="lectureForm.get('title')?.errors">
+          {{ lectureForm.get('title')?.errors?.['required'] ? 'Title is required.' : '' }}
+          {{ lectureForm.get('title')?.errors?.['backend'] }}
+        </div>
+      </div>
+
+      <!-- DATE -->
+      <div class="form-group mb-2">
+        <label>Date:</label>
+        <input type="datetime-local" class="form-control" formControlName="date" />
+        <div class="text-danger" *ngIf="lectureForm.get('date')?.errors">
+          {{ lectureForm.get('date')?.errors?.['required'] ? 'Date is required.' : '' }}
+          {{ lectureForm.get('date')?.errors?.['backend'] }}
+        </div>
+      </div>
+
+      <!-- SUBJECT -->
+      <div class="form-group mb-2">
+        <label>Subject:</label>
+        <select class="form-control" formControlName="subjectId">
+          <option [value]="null" disabled>Select Subject</option>
+          <option *ngFor="let s of subjects" [value]="s.id">{{ s.name }}</option>
+        </select>
+        <div class="text-danger" *ngIf="lectureForm.get('subjectId')?.errors">
+          {{ lectureForm.get('subjectId')?.errors?.['required'] ? 'Subject is required.' : '' }}
+          {{ lectureForm.get('subjectId')?.errors?.['backend'] }}
+        </div>
+      </div>
+
+      <!-- TEACHER -->
+      <div class="form-group mb-2">
+        <label>Teacher:</label>
+        <select class="form-control" formControlName="teacherId">
+          <option [value]="null" disabled>Select Teacher</option>
+          <option *ngFor="let t of teachers" [value]="t.id">{{ t.fullName }}</option>
+        </select>
+        <div class="text-danger" *ngIf="lectureForm.get('teacherId')?.errors">
+          {{ lectureForm.get('teacherId')?.errors?.['required'] ? 'Teacher is required.' : '' }}
+          {{ lectureForm.get('teacherId')?.errors?.['backend'] }}
+        </div>
+      </div>
+
+      <!-- DESCRIPTION -->
+      <div class="form-group mb-2">
+        <label>Description:</label>
+        <textarea class="form-control" formControlName="description" rows="3" placeholder="Lecture details (optional)"></textarea>
+        <div class="text-danger" *ngIf="lectureForm.get('description')?.errors?.['backend']">
+          {{ lectureForm.get('description')?.errors?.['backend'] }}
+        </div>
+      </div>
+
+      <!-- ACTION BUTTONS -->
+      <button class="btn btn-success mt-2" type="submit" [disabled]="lectureForm.invalid">
+        {{ isEditMode ? 'Update' : 'Create' }}
+      </button>
+      <button class="btn btn-secondary mt-2 ms-2" type="button" (click)="resetForm()" *ngIf="isEditMode">Cancel</button>
+    </form>
+
+    <hr />
+
+    <!-- TABLE -->
+    <h3>📚 All Class Lectures</h3>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Title</th>
+          <th>Schedule</th>
+          <th>Subject</th>
+          <th>Teacher</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let l of lectures">
+          <td>{{ l.id }}</td>
+          <td>{{ l.title }}</td>
+          <td>{{ l.date | date: 'short' }}</td>
+          <td>{{ l.subject?.name }}</td>
+          <td>{{ l.teacher?.fullName }}</td>
+          <td>
+            <button class="btn btn-primary btn-sm me-1" (click)="editLecture(l)">Edit</button>
+            <button class="btn btn-danger btn-sm" (click)="deleteLecture(l.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div> <!-- /ngIf -->
+</div>

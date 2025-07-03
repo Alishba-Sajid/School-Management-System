@@ -1,0 +1,66 @@
+<div class="container">
+
+  <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+
+  <h2>{{ isEditMode ? 'Edit Subject' : 'Add New Subject' }}</h2>
+
+  <form [formGroup]="subjectForm" (ngSubmit)="onSubmit()">
+    <!-- Code -->
+    <div class="form-group mb-2">
+      <label>Code</label>
+      <input formControlName="code" class="form-control" placeholder="e.g. CS101" />
+      <div class="text-danger" *ngIf="subjectForm.get('code')?.errors">
+        {{ subjectForm.get('code')?.errors?.['required'] ? 'Code is required.' : '' }}
+        {{ subjectForm.get('code')?.errors?.['backend'] }}
+      </div>
+    </div>
+
+    <!-- Name -->
+    <div class="form-group mb-2">
+      <label>Name</label>
+      <input formControlName="name" class="form-control" placeholder="e.g. Computer Science" />
+      <div class="text-danger" *ngIf="subjectForm.get('name')?.errors">
+        {{ subjectForm.get('name')?.errors?.['required'] ? 'Name is required.' : '' }}
+        {{ subjectForm.get('name')?.errors?.['backend'] }}
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <button type="submit" class="btn btn-success mt-2" [disabled]="subjectForm.invalid || isLoading">
+      {{ isEditMode ? 'Update Subject' : 'Add Subject' }}
+    </button>
+    <button type="button" *ngIf="isEditMode" class="btn btn-secondary mt-2 ms-2" (click)="cancelEdit()">
+      Cancel
+    </button>
+  </form>
+
+  <hr />
+
+  <h3>📚 Subjects List</h3>
+
+  <table class="table table-bordered" *ngIf="!isLoading && subjects.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Code</th>
+        <th>Name</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let s of subjects">
+        <td>{{ s.id }}</td>
+        <td>{{ s.code }}</td>
+        <td>{{ s.name }}</td>
+        <td>
+          <button class="btn btn-primary btn-sm me-1" (click)="editSubject(s)">Edit</button>
+          <button class="btn btn-danger btn-sm" (click)="deleteSubject(s.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!isLoading && subjects.length === 0" class="alert alert-info">
+    No subjects available.
+  </div>
+</div>

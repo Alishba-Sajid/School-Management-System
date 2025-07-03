@@ -1,0 +1,71 @@
+<div class="container">
+
+  <!-- Spinner -->
+  <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+
+  <!-- Main Content -->
+  <div *ngIf="!isLoading">
+
+    <h2>Enroll Student to Class</h2>
+
+    <form [formGroup]="enrollForm" (ngSubmit)="onSubmit()">
+
+      <!-- STUDENT SELECT -->
+      <div class="form-group mb-2">
+        <label>Student</label>
+        <select class="form-control" formControlName="studentId">
+          <option value="">Select Student</option>
+          <option *ngFor="let s of students" [value]="s.id">{{ s.fullName }}</option>
+        </select>
+        <div class="text-danger" *ngIf="enrollForm.get('studentId')?.errors">
+          {{ enrollForm.get('studentId')?.errors?.['required'] ? 'Student is required.' : '' }}
+          {{ enrollForm.get('studentId')?.errors?.['backend'] }}
+        </div>
+      </div>
+
+      <!-- CLASS LECTURE SELECT -->
+      <div class="form-group mb-2">
+        <label>Class Lecture</label>
+        <select class="form-control" formControlName="classLectureId">
+          <option value="">Select Class Lecture</option>
+          <option *ngFor="let l of lectures" [value]="l.id">{{ l.title }}</option>
+        </select>
+        <div class="text-danger" *ngIf="enrollForm.get('classLectureId')?.errors">
+          {{ enrollForm.get('classLectureId')?.errors?.['required'] ? 'Class Lecture is required.' : '' }}
+          {{ enrollForm.get('classLectureId')?.errors?.['backend'] }}
+        </div>
+      </div>
+
+      <!-- SUBMIT BUTTON -->
+      <button type="submit" class="btn btn-primary mt-3" [disabled]="enrollForm.invalid">
+        Enroll
+      </button>
+    </form>
+
+    <hr />
+
+    <!-- ENROLLMENT TABLE -->
+    <h4>Current Enrollments</h4>
+    <table class="table table-bordered mt-3">
+      <thead>
+        <tr>
+          <th>Student</th>
+          <th>Class Lecture</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let e of enrollments">
+          <td>{{ e.student?.fullName }}</td>
+          <td>{{ e.classLecture?.title }}</td>
+          <td>
+            <button class="btn btn-danger btn-sm" (click)="deleteEnrollment(e.studentId, e.classLectureId)">
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+</div>

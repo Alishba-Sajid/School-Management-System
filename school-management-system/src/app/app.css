@@ -1,0 +1,17 @@
+body {
+  background-color: #f8f9fa;
+}
+
+.navbar-brand {
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+
+.nav-link.active {
+  font-weight: 600;
+  color: #ffc107 !important;
+}
+
+.container {
+  padding-bottom: 50px;
+}
